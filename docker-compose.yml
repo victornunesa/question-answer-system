@@ -1,0 +1,23 @@
+version: '3.7'
+services:
+  node:
+    image: node:21-alpine
+    working_dir: /home/node/app
+    ports:
+      - 3000:3000
+    volumes:
+      - ./:/home/node/app
+    command: "npm run start"
+    depends_on:
+      - postgres
+  postgres:
+    image: postgres:16.2-alpine
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: root
+      POSTGRES_USER: root
+      POSTGRES_DB: system
+    ports:
+      - 5432:5432
+    volumes:
+      - ./conf/pgdata:/var/lib/postgresql/data
