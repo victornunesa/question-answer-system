@@ -5,9 +5,12 @@ services:
     working_dir: /home/node/app
     ports:
       - 3000:3000
+      - 9229:9229
     volumes:
       - ./:/home/node/app
-    command: "npm run start"
+    command: "npm run start:debug"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     depends_on:
       - postgres
   postgres:
