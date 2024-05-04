@@ -1,14 +1,18 @@
 version: '3.7'
 services:
   node:
-    image: node:21-alpine
+    build:
+      context: .
+      dockerfile: Dockerfile
     working_dir: /home/node/app
     ports:
       - 3000:3000
       - 9229:9229
     volumes:
       - ./:/home/node/app
-    command: "npm run start:debug"
+      - /home/node/app/node_modules
+    command: sh -c "npm install &&
+                  npm run start:debug"
     extra_hosts:
       - "host.docker.internal:host-gateway"
     depends_on:
@@ -23,4 +27,4 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - ./conf/pgdata:/var/lib/postgresql/data
+      - ./conf/pg-data:/var/lib/postgresql/data
