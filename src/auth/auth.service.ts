@@ -35,21 +35,5 @@ import { CreateUserDto } from 'src/users/dto/create-user.dto';
       const user = await this.validateUser(loginDTO);
       return { access_token: this.jwtService.sign({ sub: user.id, email: user.email  }) };
     }
-
-
-    async register(user: CreateUserDto): Promise<User> {
-        const existingUser = await this.usersService.findOneByEmail(user.email);
-        
-        if (existingUser) {
-          throw new BadRequestException('email already exists');
-        }
-        const hashedPassword = await bcrypt.hash(user.password, 10);
-        const newUser = { ...user, password: hashedPassword };
-        const createdUser = await this.usersService.create(newUser);
-        delete createdUser.id;
-        delete createdUser.password;
-        
-        return createdUser;
-    }
   }
   
