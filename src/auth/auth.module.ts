@@ -8,6 +8,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { User } from 'src/users/entities/user.entity';
 import { authConstants } from './auth.constants';
+import { LocalStrategy } from './local.strategy';
 
 @Module({
   imports: [

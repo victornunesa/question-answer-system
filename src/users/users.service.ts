@@ -11,7 +11,8 @@ export class UsersService {
     @InjectRepository(User)
     private usersRepository: Repository<User>,
   ) {}
-  create(createUserDto: CreateUserDto) {
+
+  create(createUserDto: CreateUserDto): Promise<User> {
     return this.usersRepository.save(createUserDto);
   }
 

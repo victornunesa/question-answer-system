@@ -6,16 +6,16 @@ import { ExtractJwt, Strategy } from "passport-jwt";
 import { LoginDTO } from './dto/login.dto';
 
 @Injectable()
-export class JWTStrategy extends PassportStrategy(Strategy) {
+export class LocalStrategy extends PassportStrategy(Strategy) {
   constructor(private authService: AuthService) {
-    super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(), 
-      ignoreExpiration: false, 
-      secretOrKey: authConstants.secret, 
-    });      
+    super();      
   }
 
-  async validate(payload: any) {
-    return {  email: payload.email };
+  async validate(loginDTO : LoginDTO) {
+    const user = await this.authService.validateUser(loginDTO);
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+    return user;
   }
 }

@@ -1,9 +1,11 @@
 import { Role } from "src/enums/role.enum";
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm"
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class User {
     @PrimaryGeneratedColumn()
+    @Exclude()
     id: number;
   
     @Column({ type: 'varchar', length: 30 })
@@ -13,6 +15,7 @@ export class User {
     email: string;
 
     @Column({ type: 'varchar' })
+    @Exclude()
     password: string;
 
     @Column({

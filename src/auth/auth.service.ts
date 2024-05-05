@@ -31,12 +31,13 @@ import { CreateUserDto } from 'src/users/dto/create-user.dto';
         return user;
     }
 
-    async login(user: User): Promise<{access_token : string}> {
-        const payload = { email: user.email, id: user.id };
-        return { access_token: this.jwtService.sign(payload) };
+    async login(loginDTO: LoginDTO): Promise<{access_token : string}> {
+      const user = await this.validateUser(loginDTO);
+      return { access_token: this.jwtService.sign({ sub: user.id, email: user.email  }) };
     }
 
-    async register(user: CreateUserDto): Promise<{access_token : string}> {
+
+    async register(user: CreateUserDto): Promise<User> {
         const existingUser = await this.usersService.findOneByEmail(user.email);
         
         if (existingUser) {
@@ -45,7 +46,10 @@ import { CreateUserDto } from 'src/users/dto/create-user.dto';
         const hashedPassword = await bcrypt.hash(user.password, 10);
         const newUser = { ...user, password: hashedPassword };
         const createdUser = await this.usersService.create(newUser);
-        return this.login(createdUser);
+        delete createdUser.id;
+        delete createdUser.password;
+        
+        return createdUser;
     }
   }
   
