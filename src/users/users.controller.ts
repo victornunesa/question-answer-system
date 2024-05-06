@@ -7,6 +7,9 @@ import { JwtAuthGuard } from 'src/guards/jwt-guard';
 import { AuthService } from '../auth/auth.service';
 import { User } from './entities/user.entity';
 import { UpdateResult } from 'typeorm';
+import { RolesGuard } from 'src/guards/roles.guard';
+import { Role } from 'src/enums/role.enum';
+import { HasRoles } from 'src/decorators/roles.decorator';
 @ApiTags('users')
 @Controller('users')
 export class UsersController {
@@ -17,10 +20,13 @@ export class UsersController {
     return this.usersService.register(CreateUserDto);
   }
 
+  // @HasRoles(Role.ORGANIZADOR)
+  // @UseGuards(JwtAuthGuard,RolesGuard)
   @Get()
   async findAll(): Promise<User[]> {
     return this.usersService.findAll();
   }
+
 
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<User> {

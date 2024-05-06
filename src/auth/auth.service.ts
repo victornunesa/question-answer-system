@@ -33,7 +33,7 @@ import { CreateUserDto } from 'src/users/dto/create-user.dto';
 
     async login(loginDTO: LoginDTO): Promise<{access_token : string}> {
       const user = await this.validateUser(loginDTO);
-      return { access_token: this.jwtService.sign({ sub: user.id, email: user.email  }) };
+      return { access_token: this.jwtService.sign({ sub: user.id, email: user.email, role: user.role  }) };
     }
   }
   
